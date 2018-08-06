@@ -1,10 +1,11 @@
 const CompFun = require('./comparator');
+const fileInput = require('./fileInput');
 
 function getConstructedGraph(students) {
     let graph = [];
     for (let i=0;i<students.length;i++){
         let jsonStr = {'name':students[i].name,'succ':[]};
-        for (let j = i+1 ;j<students.length;j++){
+        for (let j = 0 ;j<students.length;j++){
             let compValue = CompFun.compare(students[i],students[j]);
             switch (compValue) {
                 case 1:
@@ -17,6 +18,7 @@ function getConstructedGraph(students) {
             }
         }
         graph.push(jsonStr);
+  //      console.log(jsonStr);
     }
 
     return graph;
@@ -25,3 +27,5 @@ function getConstructedGraph(students) {
 module.exports = {
     getConstructedGraph : getConstructedGraph
 };
+
+//console.log(getConstructedGraph(fileInput.getStudentsFromFile('input.txt')));
