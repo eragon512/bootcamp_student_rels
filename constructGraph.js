@@ -1,5 +1,4 @@
 const CompFun = require('./comparator');
-const fileInput = require('./fileInput');
 
 function getConstructedGraph(students) {
     let graph = [];
@@ -18,7 +17,6 @@ function getConstructedGraph(students) {
             }
         }
         graph.push(jsonStr);
-        console.log(jsonStr);
     }
 
     return graph;
@@ -27,5 +25,3 @@ function getConstructedGraph(students) {
 module.exports = {
     getConstructedGraph : getConstructedGraph
 };
-
-console.log(getConstructedGraph(fileInput.getStudentsFromFile('input.txt')));
