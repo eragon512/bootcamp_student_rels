@@ -21,4 +21,5 @@ module.exports = {
   getStudentsFromFile: getStudentsFromFile
 };
 
-console.log(getStudentsFromFile('input.txt'));
+console.log((getStudentsFromFile('input.txt')));
+
