@@ -1,27 +1,46 @@
 const getgraph = require('./ConstructGraph');
 const file_io = require('./fileInput');
 
-function topological_sort_util(list_of_nodes, current_node, visited, stack,map) {
+function topological_sort_util(list_of_nodes, current_node, visited, stack,map,level) {
     visited[current_node.name] = true;
-
+    let pr = level;
     let n  = current_node.succ.length;
     for(let j=0;j<n;j++){
         if(visited[current_node.succ[j]] === false){
-            topological_sort_util(list_of_nodes, list_of_nodes[map[current_node.succ[j]]],visited, stack, map)
+            topological_sort_util(list_of_nodes, list_of_nodes[map[current_node.succ[j]]],visited, stack, map,level+1)
         }
     }
-    stack.push(current_node.name);
+    stack.push({name: current_node.name, level: pr});
 }
 
 function print_stack(stack) {
     let ans = "";
+    let topology = {};
     while(stack.length){
-        if(stack.length===1)
-            ans+= stack.pop().toString() + " \n";
+        tmp = stack.pop();
+        if(topology[tmp.level.toString()])
+            topology[tmp.level.toString()].push(tmp.name.toString()) ;
         else
-            ans += stack.pop().toString() + " > ";
+        {
+            topology[tmp.level.toString()] = [];
+            topology[tmp.level.toString()].push(tmp.name.toString()) ;
+        }
+
+
     }
-    console.log(ans);
+    res = "";
+    // console.log(Object.keys(topology).length);
+    for(let x in topology) {
+        if(topology.hasOwnProperty(x)) {
+            if (x === '0')
+                res+=('\n');
+            if(parseInt(x) === Object.keys(topology).length -1 )
+                res += topology[x];
+            else
+                res += topology[x] + "\n|\n";
+        }
+    }
+    console.log(res);
 }
 
 function compare(a,b) {
@@ -46,7 +65,7 @@ function topological_sort(list_of_nodes, size, outdegree){
     {
         if(visited[outdegree[i].name]===false) {
 
-            topological_sort_util(list_of_nodes, list_of_nodes[map[outdegree[i].name]], visited, stack,map);
+            topological_sort_util(list_of_nodes, list_of_nodes[map[outdegree[i].name]], visited, stack,map,0);
             print_stack(stack);
             stack = [];
         }
