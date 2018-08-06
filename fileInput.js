@@ -21,3 +21,5 @@ function getStudentsFromFile(filename) {
 module.exports = {
   getStudentsFromFile: getStudentsFromFile
 };
+
+console.log((getStudentsFromFile('input.txt')));
