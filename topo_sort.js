@@ -1,3 +1,6 @@
+const getgraph = require('./ConstructGraph');
+const file_io = require('./fileInput');
+
 function topological_sort_util(list_of_nodes, current_node, visited, stack,map) {
     visited[current_node.name] = true;
 
@@ -21,11 +24,19 @@ function print_stack(stack) {
     console.log(ans);
 }
 
-function topological_sort(list_of_nodes, size){
+function compare(a,b) {
+    if (a.no < b.no)
+        return 1;
+    return 0;
+}
+
+function topological_sort(list_of_nodes, size, outdegree){
 
     var stack = [];
+    outdegree.sort(compare);
     var visited = {};
     var map = {};
+    // console.log(outdegree);
     for(let i=0;i<size;i++) {
         map[list_of_nodes[i].name] = i;
         visited[list_of_nodes[i].name] = false;
@@ -33,9 +44,9 @@ function topological_sort(list_of_nodes, size){
 
     for(let i=0;i<size;i++)
     {
-        if(visited[list_of_nodes[i].name]===false) {
+        if(visited[outdegree[i].name]===false) {
 
-            topological_sort_util(list_of_nodes, list_of_nodes[i], visited, stack,map);
+            topological_sort_util(list_of_nodes, list_of_nodes[map[outdegree[i].name]], visited, stack,map);
             print_stack(stack);
             stack = [];
         }
@@ -46,30 +57,15 @@ function topological_sort(list_of_nodes, size){
 
 function test(){
 
-   let list_of_node = [
-        {
-            name: "A",
-            succ: ['B','C']
-
-        },
-        {
-            name: "B",
-            succ: ['C']
-        },
-       {
-           name: 'C',
-           succ: []
-       },
-       {
-           name: "D",
-           succ: ["E"]
-       },
-       {
-           name: "E",
-           succ: []
-       }
-       ];
-   topological_sort(list_of_node, list_of_node.length);
+   var file_content = file_io.getStudentsFromFile('input.txt');
+   list_of_node = getgraph.getConstructedGraph(file_content);
+   // console.log(list_of_node);
+    var outdegree = [];
+    for (let i=0; i<list_of_node.length; i++)
+    {
+        outdegree[i] = {no: list_of_node[i].succ.length, name: list_of_node[i].name};
+    }
+   topological_sort(list_of_node, list_of_node.length,outdegree);
 }
 
 
